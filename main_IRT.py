@@ -202,13 +202,17 @@ for folder_idx, input_folder in enumerate(input_folders):
             for id in range(num_of_sample):
                 st=time.time()
                 net_in,net_gt = data_in_memory[id]
-                print("Test: {}-{} \r".format(id, num_of_sample))
+                
 
                 with torch.no_grad():
                     prediction = net(net_in)                
                 net_in = net_in.permute(0,2,3,1).cpu().numpy()
                 net_gt = net_gt.permute(0,2,3,1).cpu().numpy()
                 prediction = prediction.detach().permute(0,2,3,1).cpu().numpy()
+                
+                
+                crt_loss = Lp_loss(prediction, net_gt)
+                print("Test: {}-{} || Loss: {:.4f} \r".format(id, num_of_sample, crt_loss))
                 
                 if with_IRT:
                     prediction_main = prediction[...,:3]
