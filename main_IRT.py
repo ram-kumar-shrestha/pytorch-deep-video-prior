@@ -211,7 +211,7 @@ for folder_idx, input_folder in enumerate(input_folders):
                 prediction = prediction.detach().permute(0,2,3,1).cpu()
                 
                 
-                crt_loss = Lp_loss(prediction, net_gt)
+                crt_loss = loss_L1(prediction[:,:3,:,:], net_gt) + 0.9*loss_L1(prediction[:,3:,:,:], net_gt)
                 print("Test: {}-{} || Loss: {:.4f} \r".format(id, num_of_sample, crt_loss))
                 
                 prediction = prediction.detach().cpu().numpy()
