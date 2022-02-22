@@ -144,6 +144,8 @@ for folder_idx, input_folder in enumerate(input_folders):
     initialize_weights(net)
     
     step = 0
+    print("net in model",net_in)
+    print("net gt model",net_gt)
     for epoch in range(1,maxepoch):
         # -----------start to train-------------
         print("Processing epoch {}".format(epoch))
@@ -206,19 +208,19 @@ for folder_idx, input_folder in enumerate(input_folders):
 
                 with torch.no_grad():
                     prediction = net(net_in)                
-#                 net_in = net_in.permute(0,2,3,1).cpu()
-#                 net_gt = net_gt.permute(0,2,3,1).cpu().numpy()
-#                 prediction = prediction.detach().permute(0,2,3,1).cpu()
+                net_in = net_in.permute(0,2,3,1).cpu()
+                net_gt = net_gt.permute(0,2,3,1).cpu().numpy()
+                prediction = prediction.detach().permute(0,2,3,1).cpu()
                 
                 
                 crt_loss = loss_L1(prediction[:,:3,:,:], net_gt) + 0.9*loss_L1(prediction[:,3:,:,:], net_gt)
                 print("Test: {}-{} || Loss: {:.4f} \r".format(id, num_of_sample, crt_loss))
                 
 #                 prediction = prediction.detach().cpu().numpy()
-#                 net_gt = net_gt.cpu().numpy()
-                net_in = net_in.permute(0,2,3,1).cpu()
-                net_gt = net_gt.permute(0,2,3,1).cpu().numpy()
-                prediction = prediction.detach().permute(0,2,3,1).cpu().numpy()
+# #                 net_gt = net_gt.cpu().numpy()
+#                 net_in = net_in.permute(0,2,3,1).cpu()
+#                 net_gt = net_gt.permute(0,2,3,1).cpu().numpy()
+#                 prediction = prediction.detach().permute(0,2,3,1).cpu().numpy()
                 
                 if with_IRT:
                     prediction_main = prediction[...,:3]
